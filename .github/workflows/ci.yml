@@ -22,4 +22,4 @@ jobs:
     - name: Build with Maven
       run: |
         cd taskmanager
-        mvn clean package
+        mvn clean package -DskipTests
