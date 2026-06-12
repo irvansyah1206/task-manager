@@ -6,17 +6,19 @@ pipeline {
         }
         stage('Compile & Unit Test') {
             steps {
-                sh './mvnw clean test' // Menjalankan tes dengan Testcontainers
+                // Diubah dari './mvnw' menjadi 'mvn' agar lebih stabil
+                sh 'mvn clean test'
             }
         }
         stage('Docker Build') {
             steps {
+                // Diubah: Perintah docker build biasanya menggunakan '.' (titik)
+                // untuk konteks folder saat ini, bukan '.mvn'
                 sh 'docker build -t irvansyah/taskmanager:${BUILD_NUMBER} .'
             }
         }
         stage('Security Scan') {
             steps {
-                // Tahap opsional: tambahkan tools scan seperti SonarQube
                 echo "Scanning for vulnerabilities..."
             }
         }
