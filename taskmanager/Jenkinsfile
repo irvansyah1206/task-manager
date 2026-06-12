@@ -1,12 +1,11 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
-            steps { checkout scm }
-        }
         stage('Compile & Unit Test') {
+            agent {
+                docker { image 'maven:3.9-eclipse-temurin-17' }
+            }
             steps {
-                // Diubah dari './mvnw' menjadi 'mvn' agar lebih stabil
                 sh 'mvn clean test'
             }
         }
