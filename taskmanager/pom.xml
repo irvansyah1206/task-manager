@@ -71,6 +71,14 @@
 			<artifactId>s3</artifactId>
 			<version>2.25.15</version> <!-- Gunakan versi stabil terbaru -->
 		</dependency>
+
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>1.19.0</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
