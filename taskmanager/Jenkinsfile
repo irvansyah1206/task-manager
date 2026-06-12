@@ -1,22 +1,23 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
-            steps { checkout scm }
-        }
         stage('Compile & Unit Test') {
+            agent {
+                docker { image 'maven:3.9-eclipse-temurin-17' }
+            }
             steps {
-                sh './mvnw clean test' // Menjalankan tes dengan Testcontainers
+                sh 'mvn clean test'
             }
         }
         stage('Docker Build') {
             steps {
+                // Diubah: Perintah docker build biasanya menggunakan '.' (titik)
+                // untuk konteks folder saat ini, bukan '.mvn'
                 sh 'docker build -t irvansyah/taskmanager:${BUILD_NUMBER} .'
             }
         }
         stage('Security Scan') {
             steps {
-                // Tahap opsional: tambahkan tools scan seperti SonarQube
                 echo "Scanning for vulnerabilities..."
             }
         }
