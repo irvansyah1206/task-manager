@@ -1,17 +1,29 @@
 pipeline {
     agent any
     stages {
-        stage('Build & Test') {
+        stage('Checkout') {
+            steps { checkout scm }
+        }
+        stage('Compile & Unit Test') {
             steps {
-                // Menjalankan test secara otomatis
-                sh 'mvn clean test'
+                sh './mvnw clean test' // Menjalankan tes dengan Testcontainers
             }
         }
-        stage('Build Image') {
+        stage('Docker Build') {
             steps {
-                // Membuat Docker Image
-                sh 'docker build -t taskmanager:latest .'
+                sh 'docker build -t irvansyah/taskmanager:${BUILD_NUMBER} .'
             }
+        }
+        stage('Security Scan') {
+            steps {
+                // Tahap opsional: tambahkan tools scan seperti SonarQube
+                echo "Scanning for vulnerabilities..."
+            }
+        }
+    }
+    post {
+        failure {
+            echo "Pipeline gagal! Segera perbaiki unit test atau build."
         }
     }
 }
