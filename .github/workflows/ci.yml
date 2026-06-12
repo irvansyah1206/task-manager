@@ -11,8 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write # Wajib ada agar bisa push ke GitHub Packages
-
+      packages: write
     steps:
       - uses: actions/checkout@v4
 
@@ -41,3 +40,28 @@ jobs:
           context: ./taskmanager
           push: true
           tags: ghcr.io/${{ github.repository }}/task-manager:latest
+
+  analyze:
+    name: Analyze
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: 'java'
+
+      - name: Build for CodeQL
+        run: |
+          cd taskmanager
+          mvn clean compile
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
