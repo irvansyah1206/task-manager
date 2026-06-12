@@ -1,0 +1,62 @@
+services:
+  # 1. Database PostgreSQL
+  db:
+    image: postgres:15
+    container_name: taskmanager-db
+    environment:
+      POSTGRES_DB: taskdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+  # 2. Redis Caching
+  redis:
+    image: redis:7-alpine
+    container_name: taskmanager-redis
+    ports:
+      - "6379:6379"
+
+  # 3. S3Mock (Alternatif S3 yang stabil & ringan)
+  s3mock:
+    image: adobe/s3mock:latest
+    container_name: taskmanager-s3mock
+    ports:
+      - "9090:9090"
+    environment:
+      - initialBuckets=my-bucket-name
+
+  # 4. Elasticsearch (Limitasi RAM agar tidak crash)
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+    container_name: taskmanager-elasticsearch
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+
+  # 5. Kibana
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.12.0
+    container_name: taskmanager-kibana
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+  # 6. Jenkins (Optional - matikan jika tidak sedang butuh CI/CD)
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: taskmanager-jenkins
+    ports:
+      - "8080:8080"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+
+volumes:
+  jenkins_home:

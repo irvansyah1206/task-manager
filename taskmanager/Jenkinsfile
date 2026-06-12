@@ -1,0 +1,17 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build & Test') {
+            steps {
+                // Menjalankan test secara otomatis
+                sh 'mvn clean test'
+            }
+        }
+        stage('Build Image') {
+            steps {
+                // Membuat Docker Image
+                sh 'docker build -t taskmanager:latest .'
+            }
+        }
+    }
+}
