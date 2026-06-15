@@ -3,7 +3,7 @@ package com.enterprise.taskmanager.service;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TaskServiceTes {
+class TaskServiceTest { // Class renamed and 'public' modifier removed
 
     @Test
     void testDummyTask() {
