@@ -1,4 +1,4 @@
-package com.enterprise.taskmanager.model;
+package com.enterprise.taskmanager.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

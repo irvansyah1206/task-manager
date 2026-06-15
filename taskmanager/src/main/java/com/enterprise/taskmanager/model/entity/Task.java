@@ -1,5 +1,6 @@
-package com.enterprise.taskmanager.model;
+package com.enterprise.taskmanager.model.entity;
 
+import com.enterprise.taskmanager.model.enums.TaskStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore; // Agar tidak terjadi circular reference
@@ -19,7 +20,7 @@ public class Task {
     private String title;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private TaskStatus status;
 
     // Join Column: Menghubungkan Task ke User
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,5 +28,4 @@ public class Task {
     @JsonIgnore // Mencegah infinite loop saat di-convert ke JSON
     private User user;
 
-    public enum Status { TODO, IN_PROGRESS, DONE }
 }
