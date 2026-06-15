@@ -1,6 +1,6 @@
 package com.enterprise.taskmanager.repository;
 
-import com.enterprise.taskmanager.model.Task;
+import com.enterprise.taskmanager.model.entity.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

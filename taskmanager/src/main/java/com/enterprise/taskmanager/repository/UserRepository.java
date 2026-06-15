@@ -1,6 +1,6 @@
 package com.enterprise.taskmanager.repository;
 
-import com.enterprise.taskmanager.model.User;
+import com.enterprise.taskmanager.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
