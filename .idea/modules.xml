@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/taskmanager.iml" filepath="$PROJECT_DIR$/.idea/taskmanager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/task-manager.iml" filepath="$PROJECT_DIR$/.idea/task-manager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/taskmanager/taskmanager.iml" filepath="$PROJECT_DIR$/taskmanager/taskmanager.iml" />
     </modules>
   </component>
 </project>

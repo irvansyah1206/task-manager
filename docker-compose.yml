@@ -17,7 +17,29 @@ services:
     ports:
       - "6379:6379"
 
-  # 3. S3Mock (Alternatif S3 yang stabil & ringan)
+  # 3. Apache Kafka (KRaft Mode - Tanpa Zookeeper agar hemat RAM)
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: taskmanager-kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka:29093'
+      KAFKA_LISTENERS: 'PLAINTEXT://0.0.0.0:29092,CONTROLLER://0.0.0.0:29093,PLAINTEXT_HOST://0.0.0.0:9092'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+      CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+
+  # 4. S3Mock (Alternatif S3 yang stabil & ringan)
   s3mock:
     image: adobe/s3mock:latest
     container_name: taskmanager-s3mock
@@ -26,7 +48,7 @@ services:
     environment:
       - initialBuckets=my-bucket-name
 
-  # 4. Elasticsearch (Limitasi RAM agar tidak crash)
+  # 5. Elasticsearch (Limitasi RAM agar tidak crash)
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
     container_name: taskmanager-elasticsearch
@@ -40,7 +62,7 @@ services:
     ports:
       - "9200:9200"
 
-  # 5. Kibana
+  # 6. Kibana
   kibana:
     image: docker.elastic.co/kibana/kibana:8.12.0
     container_name: taskmanager-kibana
@@ -49,7 +71,7 @@ services:
     depends_on:
       - elasticsearch
 
-  # 6. Jenkins (Optional - matikan jika tidak sedang butuh CI/CD)
+  # 7. Jenkins (Optional - matikan jika tidak sedang butuh CI/CD)
   jenkins:
     image: jenkins/jenkins:lts
     container_name: taskmanager-jenkins
